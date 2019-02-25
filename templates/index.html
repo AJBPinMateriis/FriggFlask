@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	<main>
+		<form action="http://127.0.0.1:5000/getData" method="GET">
+			<fieldset>
+				<legend>Start printing</legend>
+				
+				<input type="button" value="Send print file">
+				
+				<input type="text" name="texto">
+				
+				<select name="options">
+					<option value="A">Option1</option>
+					<option value="B">Option2</option>
+					<option value="C">Option3</option>
+				</select>
+				
+				<input type="submit" value="Initialize printer">
+			</fieldset>
+			
+			<input type="submit" value="Stop printer" formaction="http://127.0.0.1:5000/stopPrinting">
+			
+			<!-- TIME PRINTING / TOTAL TIME -->
+		</form>
+	</main>
+</body>	
+</html>
