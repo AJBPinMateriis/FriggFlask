@@ -4,13 +4,14 @@
 </head>
 <body>
 	<main>
-		<form action="http://127.0.0.1:5000/getData" method="GET">
+		<form action="http://127.0.0.1:5000/getData" method="POST" enctype="multipart/form-data">
+			<!-- The enctype attribute can be used only if method="post" -->
 			<fieldset>
 				<legend>Start printing</legend>
 				
-				<input type="button" value="Send print file">
+				<input type="file" value="Send print file" name="file"> <!-- ADD NAME ATTRIBUTE!!! -->
 				
-				<input type="text" name="texto">
+				<input type="text" name="texto" placeholder="add a comment">
 				
 				<select name="options">
 					<option value="A">Option1</option>
