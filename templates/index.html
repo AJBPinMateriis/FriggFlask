@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+	
+	<style>
+		.init_button{
+			background-color:red;
+		}
+	</style>
+	
 </head>
 <body>
 	<main>
@@ -19,7 +26,9 @@
 					<option value="C">Option3</option>
 				</select>
 				
-				<input type="submit" value="Initialize printer">
+				<input type="submit" value="Initialize printer" class="{{color_class}}"> <!-- replaces {{color_class}} with "init_button" received by python script -->
+			
+				<span> {{sec}} </span>
 			</fieldset>
 			
 			<input type="submit" value="Stop printer" formaction="http://127.0.0.1:5000/stopPrinting">
