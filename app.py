@@ -32,31 +32,31 @@ def get_event():
 	f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 	#print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 	
-	elapsed_time()
+	#elapsed_time() #FUNCTION
 	
 	#return render_template('index.html') !DONT RENDER THE TEMPLATE, CALL THE FUNCTION WHICH DOES
 	return redirect(url_for('index')) #import 'redirect' and 'url_for' (top)
 
 
 #prints elapsed time
-def elapsed_time():
-	start_time = time.time()
+#def elapsed_time():
+#	start_time = time.time()
 	
-	print(time.strftime("%H:%M:%S", time.gmtime(start_time))) #prints start time
+#	print(time.strftime("%H:%M:%S", time.gmtime(start_time))) #prints start time
 	
 	
 	#time.sleep(5)
 	#elapsed_time = time.time() - start_time #this gives me seconds elapsed, FIND A WAY to pass these seconds to HTML and format them
 	
-	for x in range(5):
-		time.sleep(1)
-		elapsed_time = time.time() - start_time
-		print(int(elapsed_time))
-		render_template('index.html', sec = elapsed_time)
+	#for x in range(5):
+	#	time.sleep(1)
+	#	elapsed_time = time.time() - start_time
+	#	print(int(elapsed_time))
+	#	render_template('index.html', sec = elapsed_time)
 		
 	
-	print(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))) #prints elapsed time
-	print(time.strftime("%H:%M:%S", time.gmtime(time.time())))  #prints final time
+#	print(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))) #prints elapsed time
+#	print(time.strftime("%H:%M:%S", time.gmtime(time.time())))  #prints final time
 
 @app.route('/stopPrinting', methods = ['POST','GET'])
 def stop_event():
