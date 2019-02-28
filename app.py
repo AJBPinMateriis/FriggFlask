@@ -16,14 +16,14 @@ def index():
 	#return(sys.version) SHOWS PYTHON VERSION
 
 	
-@app.route('/getData', methods = ['POST','GET'])#if 'methods' is not declared, the default is GET
+@app.route('/getData', methods = ['POST'])#if 'methods' is not declared, the default is GET
 def get_event():
 	print("Initialize printer")
 
 	#FORM DATA REQUEST
-	result = request.form
-	print(result)
-	print(result["texto"])
+	texto = request.form['comment']
+	selection = request.form['option']
+	print(texto)
 	
 	#FILE UPLOADING
 		#f = request.files['file']

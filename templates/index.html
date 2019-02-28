@@ -22,15 +22,15 @@
 				
 				<!-- <input type="file" value="Send print file" name="file"> <!-- ADD NAME ATTRIBUTE!!! -->
 				
-				<input type="text" name="texto" placeholder="add a comment">
+				<input type="text" id="texto" placeholder="add a comment">
 				
-				<select name="options">
+				<select id="options">
 					<option value="A">Option1</option>
 					<option value="B">Option2</option>
 					<option value="C">Option3</option>
 				</select>
 				
-				<input type="submit" value="Initialize printer" class="{{color_class}}"> <!-- replaces {{color_class}} with "init_button" received by python script -->
+				<button type="submit" class="{{color_class}}">Initialize printer</button> <!-- replaces {{color_class}} with "init_button" received by python script -->
 		
 			</fieldset>
 			

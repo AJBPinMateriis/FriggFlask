@@ -25,14 +25,18 @@ $(document).ready(function(){
 	}
 	
 	//requst
-	$('form').on('submit', function(){
+	$('form').on('submit', function(event){
 		
 		$.ajax({
-		
-			url: '/getData',
-			type: 'POST',
 			
-			data: $('form').serialize();
+			data: {
+				comment: $('#texto').val(),
+				option: $('#options').val()
+			},
+			type: 'POST',
+			url: '/getData'
+			
+			//data: $('form').serialize();
 			
 		})
 		.done(function(received){
@@ -42,6 +46,7 @@ $(document).ready(function(){
 			$("#contenedor").html("Request failed");
 		});
 		
+		event.preventDefault();
 	});
 });
 
