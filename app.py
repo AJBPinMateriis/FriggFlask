@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, jsonify
 import sys, os, time
 from werkzeug import secure_filename
 
@@ -26,37 +26,13 @@ def get_event():
 	print(result["texto"])
 	
 	#FILE UPLOADING
-	f = request.files['file']
-	filename = secure_filename(f.filename)
-	#print(filename)
-	f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+		#f = request.files['file']
+		#filename = secure_filename(f.filename)#print(filename)
+		#f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 	#print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-	
-	#elapsed_time() #FUNCTION
-	
-	#return render_template('index.html') !DONT RENDER THE TEMPLATE, CALL THE FUNCTION WHICH DOES
-	return redirect(url_for('index')) #import 'redirect' and 'url_for' (top)
 
-
-#prints elapsed time
-#def elapsed_time():
-#	start_time = time.time()
-	
-#	print(time.strftime("%H:%M:%S", time.gmtime(start_time))) #prints start time
-	
-	
-	#time.sleep(5)
-	#elapsed_time = time.time() - start_time #this gives me seconds elapsed, FIND A WAY to pass these seconds to HTML and format them
-	
-	#for x in range(5):
-	#	time.sleep(1)
-	#	elapsed_time = time.time() - start_time
-	#	print(int(elapsed_time))
-	#	render_template('index.html', sec = elapsed_time)
-		
-	
-#	print(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))) #prints elapsed time
-#	print(time.strftime("%H:%M:%S", time.gmtime(time.time())))  #prints final time
+	#return redirect(url_for('index')) #import 'redirect' and 'url_for' (top)
+	return jsonify({'name':'MyName'})
 
 @app.route('/stopPrinting', methods = ['POST','GET'])
 def stop_event():
