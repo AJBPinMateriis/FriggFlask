@@ -16,15 +16,15 @@
 		<!-- <form action="http://127.0.0.1:5000/getData" method="POST" enctype="multipart/form-data"> -->
 			<!-- The enctype attribute can be used only if method="post" -->
 			
-		<form method="POST">
+		<form method="POST" id="form" enctype="multipart/form-data">
 			<fieldset>
 				<legend>Start printing</legend>
 				
-				<!-- <input type="file" value="Send print file" name="file"> <!-- ADD NAME ATTRIBUTE!!! -->
+				<input type="file" value="Send print file" name="file"> <!-- ADD NAME ATTRIBUTE!!! -->
 				
-				<input type="text" id="texto" placeholder="add a comment">
+				<input type="text" name="texto" placeholder="add a comment">
 				
-				<select id="options">
+				<select name="options">
 					<option value="A">Option1</option>
 					<option value="B">Option2</option>
 					<option value="C">Option3</option>
@@ -34,9 +34,12 @@
 		
 			</fieldset>
 			
-			<input type="submit" value="Stop printer" formaction="http://127.0.0.1:5000/stopPrinting">
+			<!-- <input type="submit" value="Stop printer" formaction="http://127.0.0.1:5000/stopPrinting"> -->
+			
 			<!-- TIME PRINTING / TOTAL TIME -->
 		</form>
+		
+		<input type="button" id="stop" value="Stop printer">
 		
 		<input type="button" id="init_printer" value="stopwatch">
 		
@@ -46,8 +49,84 @@
 		
 	</main>
 	
-	<script src="{{url_for('static', filename='js/counter.js') }}"></script>
+	
 	<!-- Create a 'static' folder and within a 'js' folder -->
+	<!-- <script src="{{url_for('static', filename='js/counter.js') }}"></script> -->
+
+	<script>
+		$(document).ready(function(){
+			var counter = document.getElementById("counter"),
+				seconds = 0, minutes = 0, hours = 0;
+							
+			document.getElementById("init_printer").addEventListener("click", start_count);	
+						
+			function start_count(){
+				setInterval(stopwatch, 1000);
+			}
+						
+			function stopwatch(){
+				seconds++;
+				if(seconds >= 60){
+					seconds = 0;
+					minutes++;
+					if(minutes >= 60){
+						minutes = 0;
+						hours++;
+					}
+				}
+							
+				counter.innerHTML = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + 
+									(minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" +
+									(seconds > 9 ? seconds : "0" + seconds);
+			}
+			
+			//requst
+			$('form').on('submit', function(event){
+				
+				//////
+				var formulario = new FormData( $('form')[0] ); //[0] IS REQUIRED
+				//////
+				
+				$.ajax({
+					
+					//data: {
+					//	comment: $('#texto').val(),
+					//	option: $('#options').val()
+					//},
+					
+					//data: $('form').serialize(),
+					
+					data: formulario,
+					processData: false,
+					contentType: false,
+					type: 'POST',
+					url: '/getData'
+					
+					//data: $('form').serialize();
+					
+				})
+				.done(function(received){
+					$("#contenedor").html(received.name);
+				})
+				.fail(function(){
+					$("#contenedor").text("Request failed");
+				});
+				
+				event.preventDefault();
+			});
+			
+			$("#stop").on("click", function(){
+				
+				$.ajax({
+					
+					url: '/stopPrinting',
+					type: 'post'
+				})
+			});
+			
+		});
+	</script>
+	
 
 </body>	
 </html>

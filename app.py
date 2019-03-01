@@ -21,14 +21,14 @@ def get_event():
 	print("Initialize printer")
 
 	#FORM DATA REQUEST
-	texto = request.form['comment']
-	selection = request.form['option']
-	print(texto)
+	result = request.form
+	print(result)
 	
 	#FILE UPLOADING
-		#f = request.files['file']
-		#filename = secure_filename(f.filename)#print(filename)
-		#f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+	f = request.files['file']
+	filename = secure_filename(f.filename)
+	#print(filename)
+	f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 	#print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
 	#return redirect(url_for('index')) #import 'redirect' and 'url_for' (top)
