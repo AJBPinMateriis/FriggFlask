@@ -32,7 +32,9 @@ def get_event():
 	#print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
 	#return redirect(url_for('index')) #import 'redirect' and 'url_for' (top)
-	return jsonify({'name':'MyName'})
+	
+	total_predicted_time = 90 #in seconds
+	return jsonify({'printing_time':total_predicted_time})
 
 @app.route('/stopPrinting', methods = ['POST','GET'])
 def stop_event():

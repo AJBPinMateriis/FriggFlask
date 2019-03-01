@@ -6,9 +6,14 @@
 		.init_button{
 			background-color:red;
 		}
+		
+		.exceeded_time{
+			color:red;
+		}
 	</style>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="../static/js/jquery-3.3.1.js"></script> <!-- fallback -->
 	
 </head>
 <body>
@@ -35,15 +40,13 @@
 			</fieldset>
 			
 			<!-- <input type="submit" value="Stop printer" formaction="http://127.0.0.1:5000/stopPrinting"> -->
-			
-			<!-- TIME PRINTING / TOTAL TIME -->
+
 		</form>
 		
 		<input type="button" id="stop" value="Stop printer">
 		
-		<input type="button" id="init_printer" value="stopwatch">
-		
 		<time id="counter">00:00:00</time>
+		<span id="total_time"></span>
 				
 		<div id="contenedor"></div>
 		
@@ -53,17 +56,21 @@
 	<!-- Create a 'static' folder and within a 'js' folder -->
 	<!-- <script src="{{url_for('static', filename='js/counter.js') }}"></script> -->
 
+	<!-- <script src="../static/js/requests.js"></script> -->
+	
 	<script>
 		$(document).ready(function(){
 			var counter = document.getElementById("counter"),
-				seconds = 0, minutes = 0, hours = 0;
-							
-			document.getElementById("init_printer").addEventListener("click", start_count);	
-						
+				seconds = 0, minutes = 0, hours = 0, elapsed_time = 0, predicted_time = 0,
+				timer;
+									
+			//document.getElementById("init_printer").addEventListener("click", start_count);
+			//ERASE UNUSED CODE!!!, I GOT A "METHOD NOT ALLOWED" ERROR BECAUSE OF THE LINE ABOVE
+						 
 			function start_count(){
-				setInterval(stopwatch, 1000);
+				timer = setInterval(stopwatch, 1000);
 			}
-						
+								
 			function stopwatch(){
 				seconds++;
 				if(seconds >= 60){
@@ -74,56 +81,79 @@
 						hours++;
 					}
 				}
-							
+									
 				counter.innerHTML = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + 
 									(minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" +
 									(seconds > 9 ? seconds : "0" + seconds);
+						
+				elapsed_time++;
+				if(elapsed_time > predicted_time){
+					$(counter).addClass("exceeded_time");
+				}
 			}
 			
+			function time_format(predicted_time){
+				if(predicted_time > 1200){
+					var hours = Math.floor(predicted_time / 60);
+				}
+				if(predicted_time > 60){
+					var minutes = Math.floor(predicted_time / 60);
+					var seconds = ((predicted_time / 60) % 1) * 60;
+					$("#total_time").html("/ 00:" + minutes + ":" + seconds);
+				}
+			}
+					
 			//requst
 			$('form').on('submit', function(event){
-				
+						
 				//////
 				var formulario = new FormData( $('form')[0] ); //[0] IS REQUIRED
 				//////
-				
+						
 				$.ajax({
-					
+							
 					//data: {
 					//	comment: $('#texto').val(),
 					//	option: $('#options').val()
 					//},
-					
+							
 					//data: $('form').serialize(),
-					
+							
 					data: formulario,
 					processData: false,
 					contentType: false,
 					type: 'POST',
 					url: '/getData'
-					
+							
 					//data: $('form').serialize();
-					
+							
 				})
 				.done(function(received){
-					$("#contenedor").html(received.name);
+					predicted_time = received.printing_time;
+					$("#contenedor").html("Total predicted time: " + predicted_time);
+					
+					time_format(predicted_time);		
+					start_count();
 				})
 				.fail(function(){
 					$("#contenedor").text("Request failed");
 				});
-				
+						
 				event.preventDefault();
 			});
-			
-			$("#stop").on("click", function(){
-				
-				$.ajax({
 					
+			$("#stop").on("click", function(){
+						
+				$.ajax({
+							
 					url: '/stopPrinting',
 					type: 'post'
 				})
+				.done(function(){
+					clearInterval(timer);
+				});
 			});
-			
+					
 		});
 	</script>
 	
