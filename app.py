@@ -25,16 +25,21 @@ def get_event():
 	print(result)
 	
 	#FILE UPLOADING
-	f = request.files['file']
-	filename = secure_filename(f.filename)
+		f = request.files['file']
+		filename = secure_filename(f.filename)
 	#print(filename)
-	f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+		f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 	#print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
 	#return redirect(url_for('index')) #import 'redirect' and 'url_for' (top)
 	
-	total_predicted_time = 90 #in seconds
+	total_predicted_time = 5 #in seconds
 	return jsonify({'printing_time':total_predicted_time})
+
+@app.route('/timeExceeded', methods = ['POST','GET'])
+def time_exceeded():
+	print("Printing time exceeded")
+	return '' #returns an empty string (returns nothing)
 
 @app.route('/stopPrinting', methods = ['POST','GET'])
 def stop_event():

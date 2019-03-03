@@ -7,7 +7,7 @@
 			background-color:red;
 		}
 		
-		.exceeded_time{
+		.time_exceeded{
 			color:red;
 		}
 	</style>
@@ -46,7 +46,7 @@
 		<input type="button" id="stop" value="Stop printer">
 		
 		<time id="counter">00:00:00</time>
-		<span id="total_time"></span>
+		<time id="total_time"></time>
 				
 		<div id="contenedor"></div>
 		
@@ -82,25 +82,50 @@
 					}
 				}
 									
-				counter.innerHTML = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + 
-									(minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" +
-									(seconds > 9 ? seconds : "0" + seconds);
+				counter.innerHTML = time_format(hours,minutes,seconds);
 						
 				elapsed_time++;
 				if(elapsed_time > predicted_time){
-					$(counter).addClass("exceeded_time");
+					$(counter).addClass("time_exceeded");
+					$.ajax({
+						url: '/timeExceeded',
+						type: 'POST'
+					})
 				}
 			}
 			
-			function time_format(predicted_time){
-				if(predicted_time > 1200){
-					var hours = Math.floor(predicted_time / 60);
+			function predicted_time_format(predicted_time){
+				var p_hours, p_minutes, p_seconds;
+				
+				//if the predicted time is more than an hour
+				if(predicted_time >= 3600){
+					p_hours = Math.floor((predicted_time / 60) / 60);
+					p_minutes = Math.floor((((predicted_time / 60) / 60) % 1) * 60);
+					p_seconds = Math.floor((((((predicted_time / 60) / 60) % 1) * 60) % 1) * 60);
 				}
-				if(predicted_time > 60){
-					var minutes = Math.floor(predicted_time / 60);
-					var seconds = ((predicted_time / 60) % 1) * 60;
-					$("#total_time").html("/ 00:" + minutes + ":" + seconds);
+				//if the predicted time is more than a minute but less than an hour
+				else if(predicted_time >= 60){
+					p_hours = 0;
+					p_minutes = Math.floor(predicted_time / 60);
+					p_seconds = Math.floor(((predicted_time / 60) % 1) * 60);
 				}
+				//if the predicted time is less than a minute
+				else{
+					p_hours = 0;
+					p_minutes = 0;
+					p_seconds = predicted_time;
+				}
+				
+				$("#total_time").html("/ " + time_format(p_hours,p_minutes,p_seconds));
+			}
+			
+			function time_format(hours, minutes, seconds){
+			
+				var format = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + 
+							(minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" +
+							(seconds > 9 ? seconds : "0" + seconds);
+							
+				return format;
 			}
 					
 			//requst
@@ -120,8 +145,8 @@
 					//data: $('form').serialize(),
 							
 					data: formulario,
-					processData: false,
-					contentType: false,
+					processData: false, //necessary to transfer a form with a 'file' type input
+					contentType: false,	//
 					type: 'POST',
 					url: '/getData'
 							
@@ -132,7 +157,7 @@
 					predicted_time = received.printing_time;
 					$("#contenedor").html("Total predicted time: " + predicted_time);
 					
-					time_format(predicted_time);		
+					predicted_time_format(predicted_time);		
 					start_count();
 				})
 				.fail(function(){
