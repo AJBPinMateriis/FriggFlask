@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request, jsonify
 import sys, os, time
 from werkzeug import secure_filename
 
-UPLOAD_FOLDER = '/home/pi/Desktop/Flask_Git/FriggFlask/uploaded_files'
+UPLOAD_FOLDER = '/home/pi/Desktop/FriggFlask/uploaded_files'
 #ALLOWED_EXTENSIONS = set(['txt']) #TRY LATER
 
 app = Flask(__name__)
@@ -25,10 +25,10 @@ def get_event():
 	print(result)
 	
 	#FILE UPLOADING
-		f = request.files['file']
-		filename = secure_filename(f.filename)
+	f = request.files['file']
+	filename = secure_filename(f.filename)
 	#print(filename)
-		f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+	f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 	#print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
 	#return redirect(url_for('index')) #import 'redirect' and 'url_for' (top)
